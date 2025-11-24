@@ -1,37 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export const HeroTech = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [stats, setStats] = useState({
-    visibility: 0,
-    position: 0,
-    brands: 0,
-  });
-
-  // Animated counter effect
-  useEffect(() => {
-    const duration = 2000;
-    const steps = 60;
-    const interval = duration / steps;
-    let currentStep = 0;
-
-    const timer = setInterval(() => {
-      currentStep++;
-      const progress = currentStep / steps;
-      
-      setStats({
-        visibility: Math.floor(24 * progress),
-        position: (2.3 * progress).toFixed(1) as any,
-        brands: Math.floor(15247 * progress),
-      });
-
-      if (currentStep >= steps) clearInterval(timer);
-    }, interval);
-
-    return () => clearInterval(timer);
-  }, []);
 
   // Animated network background
   useEffect(() => {
@@ -157,36 +129,34 @@ export const HeroTech = () => {
               </p>
             </div>
 
-            {/* Animated metrics centered */}
-            <div className="flex justify-center gap-8 flex-wrap">
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm min-w-[140px]">
-                  <p className="text-4xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent">
-                    +{stats.visibility}%
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-2">Croissance moyenne</p>
-                </div>
-              </div>
+            {/* Animated brand logos carousel */}
+            <div className="relative overflow-hidden py-8">
+              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10" />
               
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-secondary/20 to-transparent rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm min-w-[140px]">
-                  <p className="text-4xl font-bold bg-gradient-to-br from-secondary to-secondary/60 bg-clip-text text-transparent">
-                    {stats.position}
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-2">Position moyenne</p>
-                </div>
-              </div>
-              
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm min-w-[140px]">
-                  <p className="text-4xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">
-                    {stats.brands.toLocaleString()}
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-2">Marques suivies</p>
-                </div>
+              <div className="flex gap-12 animate-scroll">
+                {/* First set of logos */}
+                {["L'Oréal", "Estée Lauder", "Nivea", "Maybelline", "Lancôme", "Clinique", "Garnier", "Neutrogena", "Shiseido", "MAC"].map((brand, i) => (
+                  <div
+                    key={`brand-1-${i}`}
+                    className="flex-shrink-0 flex items-center justify-center min-w-[160px] h-20 rounded-xl border border-primary/20 bg-card/50 backdrop-blur-sm px-6 hover:border-primary/40 hover:bg-card/70 transition-all"
+                  >
+                    <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                      {brand}
+                    </span>
+                  </div>
+                ))}
+                {/* Duplicate set for seamless loop */}
+                {["L'Oréal", "Estée Lauder", "Nivea", "Maybelline", "Lancôme", "Clinique", "Garnier", "Neutrogena", "Shiseido", "MAC"].map((brand, i) => (
+                  <div
+                    key={`brand-2-${i}`}
+                    className="flex-shrink-0 flex items-center justify-center min-w-[160px] h-20 rounded-xl border border-primary/20 bg-card/50 backdrop-blur-sm px-6 hover:border-primary/40 hover:bg-card/70 transition-all"
+                  >
+                    <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                      {brand}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -234,10 +204,21 @@ export const HeroTech = () => {
       </div>
 
       <style>{`
-        @keyframes expandBar {
-          from {
-            width: 0;
+        @keyframes scroll {
+          0% {
+            transform: translateX(0);
           }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        
+        .animate-scroll {
+          animation: scroll 30s linear infinite;
+        }
+        
+        .animate-scroll:hover {
+          animation-play-state: paused;
         }
         
         @keyframes float {
