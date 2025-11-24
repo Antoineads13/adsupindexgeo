@@ -1,5 +1,5 @@
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
+import { HeroTech } from "@/components/HeroTech";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { TopBrandsWithChart } from "@/components/TopBrandsWithChart";
 import { BrandTable } from "@/components/BrandTable";
@@ -15,7 +15,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <Hero />
+      <HeroTech />
       <CategoryTabs />
       <TopBrandsWithChart />
       <BrandTable />
