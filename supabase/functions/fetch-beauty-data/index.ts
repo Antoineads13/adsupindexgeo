@@ -85,8 +85,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Skip header row and parse data - limit to top 50 brands
-    const brands: SheetRow[] = rows.slice(1, 51).map((row: string[]) => ({
+    // Skip header row and parse data - limit to top 30 brands
+    const brands: SheetRow[] = rows.slice(1, 31).map((row: string[]) => ({
       rank: parseInt(row[0]) || 0,
       name: row[1] || '',
       totalMentions: parseInt(row[2]) || 0,
