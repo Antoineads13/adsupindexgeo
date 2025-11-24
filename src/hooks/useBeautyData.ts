@@ -47,31 +47,7 @@ export const useBeautyData = () => {
       }
 
       console.log("Beauty data fetched successfully:", data.brands.length, "brands");
-      
-      // Remove duplicates, keeping the one with highest market share
-      const uniqueBrandsMap = new Map<string, BeautyBrand>();
-      
-      data.brands.forEach((brand) => {
-        const existingBrand = uniqueBrandsMap.get(brand.name);
-        if (!existingBrand || brand.marketShare > existingBrand.marketShare) {
-          uniqueBrandsMap.set(brand.name, brand);
-        }
-      });
-      
-      // Convert back to array and reassign ranks
-      const uniqueBrands = Array.from(uniqueBrandsMap.values())
-        .sort((a, b) => b.marketShare - a.marketShare)
-        .map((brand, index) => ({
-          ...brand,
-          rank: index + 1,
-        }));
-      
-      console.log(`Removed ${data.brands.length - uniqueBrands.length} duplicate brands`);
-      
-      return {
-        ...data,
-        brands: uniqueBrands,
-      };
+      return data;
     },
     refetchInterval: 5 * 60 * 1000, // Refresh every 5 minutes
     staleTime: 2 * 60 * 1000, // Consider data stale after 2 minutes
