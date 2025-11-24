@@ -11,50 +11,33 @@ export const DailyVisibilityChart = () => {
   const chartData = useMemo(() => {
     if (!data?.dailyVisibility || data.dailyVisibility.length === 0) return [];
 
-    // Group data by date and calculate percentages
+    // Group data by date
     const groupedByDate: Record<string, Record<string, number>> = {};
-    const totalsByDate: Record<string, number> = {};
     
     data.dailyVisibility.forEach((item: DailyVisibility) => {
       if (!groupedByDate[item.date]) {
         groupedByDate[item.date] = {};
-        totalsByDate[item.date] = 0;
       }
       groupedByDate[item.date][item.brand] = item.mentions;
-      totalsByDate[item.date] += item.mentions;
     });
 
-    // Convert to array format with percentages and format dates
-    const allData = Object.entries(groupedByDate).map(([date, brands]) => {
-      const totalMentions = totalsByDate[date];
-      const percentages: Record<string, number> = {};
-      
-      Object.entries(brands).forEach(([brand, mentions]) => {
-        percentages[brand] = totalMentions > 0 
-          ? Math.round((mentions / totalMentions) * 100 * 10) / 10 // Round to 1 decimal
-          : 0;
-      });
-      
+    // Convert to array format for recharts and format dates
+    return Object.entries(groupedByDate).map(([date, brands]) => {
       try {
         const parsedDate = parseISO(date);
         return {
           date: format(parsedDate, "dd/MM"),
           fullDate: date,
-          sortDate: parsedDate.getTime(),
-          ...percentages,
+          ...brands,
         };
       } catch {
         return {
           date,
           fullDate: date,
-          sortDate: new Date(date).getTime(),
-          ...percentages,
+          ...brands,
         };
       }
-    }).sort((a, b) => a.sortDate - b.sortDate);
-
-    // Keep only last 15 days
-    return allData.slice(-15);
+    }).sort((a, b) => new Date(a.fullDate).getTime() - new Date(b.fullDate).getTime());
   }, [data]);
 
   // Get top brands for the legend
@@ -125,13 +108,12 @@ export const DailyVisibilityChart = () => {
                 stroke="hsl(var(--muted-foreground))"
                 tick={{ fill: "hsl(var(--muted-foreground))" }}
                 label={{ 
-                  value: 'Part de marché (%)', 
+                  value: 'Mentions', 
                   angle: -90, 
                   position: 'insideLeft', 
                   fill: "hsl(var(--muted-foreground))",
                   style: { fontWeight: 'bold' }
                 }}
-                domain={[0, 100]}
               />
               <Tooltip 
                 contentStyle={{
@@ -166,7 +148,7 @@ export const DailyVisibilityChart = () => {
           </ResponsiveContainer>
           
           <div className="mt-6 text-center text-sm text-muted-foreground">
-            Données des 15 derniers jours • Part de marché en % • Top 5 marques
+            Données basées sur {chartData.length} jours d'analyse • Top 5 marques
           </div>
         </Card>
       </div>
