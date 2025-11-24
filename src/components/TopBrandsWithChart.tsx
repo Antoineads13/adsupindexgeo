@@ -41,21 +41,6 @@ const CustomTooltip = ({ active, payload }: any) => {
 export const TopBrandsWithChart = () => {
   const { data: beautyData, isLoading, error } = useBeautyData();
 
-  if (error) {
-    return (
-      <section className="bg-gradient-to-b from-background to-muted/20 py-16">
-        <div className="container mx-auto px-4">
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Erreur lors du chargement des données. Veuillez réessayer plus tard.
-            </AlertDescription>
-          </Alert>
-        </div>
-      </section>
-    );
-  }
-
   const topBrands = beautyData?.brands.slice(0, 3) || [];
   
   // Process daily visibility data
@@ -96,6 +81,21 @@ export const TopBrandsWithChart = () => {
     if (!beautyData?.brands) return [];
     return beautyData.brands.slice(0, 5).map(b => b.name);
   }, [beautyData]);
+
+  if (error) {
+    return (
+      <section className="bg-gradient-to-b from-background to-muted/20 py-16">
+        <div className="container mx-auto px-4">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Erreur lors du chargement des données. Veuillez réessayer plus tard.
+            </AlertDescription>
+          </Alert>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-gradient-to-b from-background to-muted/20 py-16">
