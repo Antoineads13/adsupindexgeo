@@ -1,1 +1,4 @@
 project_id = "qmoxnsufvlgpejofkrxw"
+
+[functions.fetch-beauty-data]
+verify_jwt = false
