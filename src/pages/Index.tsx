@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { CategoryTabs } from "@/components/CategoryTabs";
 import { TopBrandsWithChart } from "@/components/TopBrandsWithChart";
 import { BrandTable } from "@/components/BrandTable";
+import { ResponsePositionTable } from "@/components/ResponsePositionTable";
 import { KeywordTable } from "@/components/KeywordTable";
 import { FeatureCards } from "@/components/FeatureCards";
 import { Industries } from "@/components/Industries";
@@ -18,6 +19,7 @@ const Index = () => {
       <CategoryTabs />
       <TopBrandsWithChart />
       <BrandTable />
+      <ResponsePositionTable />
       <KeywordTable />
       <FeatureCards />
       <Industries />

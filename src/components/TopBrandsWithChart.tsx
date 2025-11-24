@@ -67,20 +67,20 @@ export const TopBrandsWithChart = () => {
             {topBrands.map((brand, index) => (
               <div
                 key={brand.name}
-                className={`relative p-6 ${
+                className={`group relative p-8 transition-all hover:bg-muted/30 ${
                   index < 2 ? "border-r-2 border-border" : ""
                 }`}
               >
-                <div className="absolute right-4 top-4 text-3xl opacity-20">
+                <div className="absolute right-6 top-6 text-5xl opacity-20 transition-opacity group-hover:opacity-30">
                   {brand.icon}
                 </div>
                 
                 <div className="relative">
-                  <p className="mb-1 text-xs text-muted-foreground">Score de Visibilité</p>
-                  <div className="mb-4 flex items-end gap-2">
-                    <h3 className="text-3xl font-bold">{brand.score}</h3>
+                  <p className="mb-2 text-sm font-medium text-muted-foreground">Score de Visibilité</p>
+                  <div className="mb-6 flex items-end gap-3">
+                    <h3 className="text-5xl font-bold">{brand.score}</h3>
                     <span
-                      className={`mb-1 text-sm font-semibold ${
+                      className={`mb-2 text-lg font-bold ${
                         brand.trending === "up" ? "text-green-600" : "text-red-600"
                       }`}
                     >
@@ -88,14 +88,14 @@ export const TopBrandsWithChart = () => {
                     </span>
                   </div>
                   
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <div
-                      className="flex h-8 w-8 items-center justify-center rounded-lg"
+                      className="flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
                       style={{ backgroundColor: `${brand.color}20` }}
                     >
-                      <span className="text-lg">{brand.icon}</span>
+                      <span className="text-2xl">{brand.icon}</span>
                     </div>
-                    <h4 className="text-lg font-semibold">{brand.name}</h4>
+                    <h4 className="text-xl font-bold">{brand.name}</h4>
                   </div>
                 </div>
               </div>
