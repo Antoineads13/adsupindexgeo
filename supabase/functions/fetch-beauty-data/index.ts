@@ -35,8 +35,26 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Fetch data from Google Sheets - using A:Z range to get all data from first sheet
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/A:Z?key=${apiKey}`;
+    // First, get the spreadsheet metadata to find the first sheet name
+    console.log('Fetching spreadsheet metadata...');
+    const metadataUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}?key=${apiKey}`;
+    const metadataResponse = await fetch(metadataUrl);
+    
+    if (!metadataResponse.ok) {
+      const errorText = await metadataResponse.text();
+      console.error('Failed to fetch spreadsheet metadata:', errorText);
+      return new Response(
+        JSON.stringify({ error: 'Failed to fetch spreadsheet metadata', details: errorText }),
+        { status: metadataResponse.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const metadata = await metadataResponse.json();
+    const firstSheetName = metadata.sheets[0].properties.title;
+    console.log('First sheet name:', firstSheetName);
+
+    // Now fetch data from the first sheet
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(firstSheetName)}?key=${apiKey}`;
     console.log('Fetching data from Google Sheets...');
     
     const response = await fetch(url);
@@ -73,12 +91,13 @@ Deno.serve(async (req) => {
       averagePosition: parseFloat(row[7]) || 0,
     }));
 
-    console.log(`Successfully fetched ${brands.length} brands`);
+    console.log(`Successfully fetched ${brands.length} brands from sheet: ${firstSheetName}`);
 
     return new Response(
       JSON.stringify({ 
         brands,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
+        sheetName: firstSheetName
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
