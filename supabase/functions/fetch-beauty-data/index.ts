@@ -6,7 +6,6 @@ const corsHeaders = {
 };
 
 const SHEET_ID = '19rnEC9yMqU8-c0_YKElyXo2hax4EbcRZdFHERNGOESI';
-const SHEET_NAME = 'Sheet1'; // Ajustez si nécessaire
 
 interface SheetRow {
   rank: number;
@@ -36,8 +35,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Fetch data from Google Sheets
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${apiKey}`;
+    // Fetch data from Google Sheets - using A:Z range to get all data from first sheet
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/A:Z?key=${apiKey}`;
     console.log('Fetching data from Google Sheets...');
     
     const response = await fetch(url);
