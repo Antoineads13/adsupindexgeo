@@ -1,8 +1,7 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { CategoryTabs } from "@/components/CategoryTabs";
-import { TopBrands } from "@/components/TopBrands";
-import { TrendChart } from "@/components/TrendChart";
+import { TopBrandsWithChart } from "@/components/TopBrandsWithChart";
 import { BrandTable } from "@/components/BrandTable";
 import { KeywordTable } from "@/components/KeywordTable";
 import { FeatureCards } from "@/components/FeatureCards";
@@ -17,8 +16,7 @@ const Index = () => {
       <Header />
       <Hero />
       <CategoryTabs />
-      <TopBrands />
-      <TrendChart />
+      <TopBrandsWithChart />
       <BrandTable />
       <KeywordTable />
       <FeatureCards />
