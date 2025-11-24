@@ -19,7 +19,6 @@ const Index = () => {
       <HeroTech />
       <CategoryTabs />
       <TopBrandsWithChart />
-      <DailyVisibilityChart />
       <BrandTable />
       <ResponsePositionTable />
       <KeywordTable />
