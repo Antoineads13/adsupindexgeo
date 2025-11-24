@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
       const errorText = await metadataResponse.text();
       console.error('Failed to fetch spreadsheet metadata:', errorText);
       return new Response(
-        JSON.stringify({ error: 'Failed to fetch spreadsheet metadata', details: errorText }),
+        JSON.stringify({ error: 'Failed to fetch spreadsheet metadata' }),
         { status: metadataResponse.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
       const errorText = await response.text();
       console.error('Google Sheets API error:', errorText);
       return new Response(
-        JSON.stringify({ error: 'Failed to fetch data from Google Sheets', details: errorText }),
+        JSON.stringify({ error: 'Failed to fetch data from Google Sheets' }),
         { status: response.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -85,8 +85,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Skip header row and parse data
-    const brands: SheetRow[] = rows.slice(1).map((row: string[]) => ({
+    // Skip header row and parse data - limit to top 50 brands
+    const brands: SheetRow[] = rows.slice(1, 51).map((row: string[]) => ({
       rank: parseInt(row[0]) || 0,
       name: row[1] || '',
       totalMentions: parseInt(row[2]) || 0,
@@ -103,32 +103,25 @@ Deno.serve(async (req) => {
     console.log('Fetching Daily Visibility data...');
     const dailyVisibilityUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent('Daily Visibility')}?key=${apiKey}`;
     
-    console.log('Daily Visibility URL:', dailyVisibilityUrl);
-    
     const dailyVisibilityResponse = await fetch(dailyVisibilityUrl);
     let dailyVisibility: DailyVisibilityRow[] = [];
-    
-    console.log('Daily Visibility response status:', dailyVisibilityResponse.status);
     
     if (dailyVisibilityResponse.ok) {
       const dailyData = await dailyVisibilityResponse.json();
       const dailyRows = dailyData.values;
       
-      console.log('Daily Visibility rows found:', dailyRows?.length || 0);
-      
       if (dailyRows && dailyRows.length > 1) {
-        // Skip header row and parse daily visibility data
-        dailyVisibility = dailyRows.slice(1).map((row: string[]) => ({
+        // Skip header row and parse daily visibility data - limit to last 500 records
+        const startIndex = Math.max(1, dailyRows.length - 500);
+        dailyVisibility = dailyRows.slice(startIndex).map((row: string[]) => ({
           date: row[0] || '',
           brand: row[1] || '',
           mentions: parseInt(row[2]) || 0,
         }));
         console.log(`Successfully fetched ${dailyVisibility.length} daily visibility records`);
-        console.log('Sample daily data:', dailyVisibility.slice(0, 3));
       }
     } else {
-      const errorText = await dailyVisibilityResponse.text();
-      console.error('Failed to fetch Daily Visibility:', errorText);
+      console.error('Failed to fetch Daily Visibility');
     }
 
     return new Response(
