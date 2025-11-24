@@ -2,6 +2,8 @@ import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useBeautyData, DailyVisibility } from "@/hooks/useBeautyData";
 import { useMemo } from "react";
+import { format, parseISO } from "date-fns";
+import { fr } from "date-fns/locale";
 
 export const DailyVisibilityChart = () => {
   const { data, isLoading } = useBeautyData();
@@ -19,11 +21,23 @@ export const DailyVisibilityChart = () => {
       groupedByDate[item.date][item.brand] = item.mentions;
     });
 
-    // Convert to array format for recharts
-    return Object.entries(groupedByDate).map(([date, brands]) => ({
-      date,
-      ...brands,
-    })).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    // Convert to array format for recharts and format dates
+    return Object.entries(groupedByDate).map(([date, brands]) => {
+      try {
+        const parsedDate = parseISO(date);
+        return {
+          date: format(parsedDate, "dd MMM", { locale: fr }),
+          fullDate: date,
+          ...brands,
+        };
+      } catch {
+        return {
+          date,
+          fullDate: date,
+          ...brands,
+        };
+      }
+    }).sort((a, b) => new Date(a.fullDate).getTime() - new Date(b.fullDate).getTime());
   }, [data]);
 
   // Get top brands for the legend
@@ -54,8 +68,11 @@ export const DailyVisibilityChart = () => {
   }
 
   if (!chartData || chartData.length === 0) {
+    console.log("No daily visibility data available");
     return null;
   }
+
+  console.log("Daily visibility chart data:", chartData.length, "days", topBrands);
 
   return (
     <section className="relative py-16 bg-gradient-to-b from-primary/5 to-background overflow-hidden">
@@ -67,41 +84,53 @@ export const DailyVisibilityChart = () => {
           <h2 className="mb-4 text-4xl font-bold">
             Visibilité{" "}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Journalière
+              Jour par Jour
             </span>
           </h2>
           <p className="text-lg text-muted-foreground">
-            Évolution des mentions des marques dans les assistants IA
+            Évolution quotidienne des mentions dans les assistants IA
           </p>
         </div>
 
         <Card className="overflow-hidden border-2 border-primary/20 bg-card/80 backdrop-blur-xl shadow-[0_0_50px_hsl(var(--primary)_/_0.1)] p-6">
-          <ResponsiveContainer width="100%" height={400}>
-            <LineChart data={chartData}>
+          <ResponsiveContainer width="100%" height={500}>
+            <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
               <XAxis 
                 dataKey="date" 
                 stroke="hsl(var(--muted-foreground))"
-                tick={{ fill: "hsl(var(--muted-foreground))" }}
+                tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                angle={-45}
+                textAnchor="end"
+                height={80}
               />
               <YAxis 
                 stroke="hsl(var(--muted-foreground))"
                 tick={{ fill: "hsl(var(--muted-foreground))" }}
-                label={{ value: 'Mentions', angle: -90, position: 'insideLeft', fill: "hsl(var(--muted-foreground))" }}
+                label={{ 
+                  value: 'Mentions', 
+                  angle: -90, 
+                  position: 'insideLeft', 
+                  fill: "hsl(var(--muted-foreground))",
+                  style: { fontWeight: 'bold' }
+                }}
               />
               <Tooltip 
                 contentStyle={{
                   backgroundColor: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: "8px",
+                  border: "2px solid hsl(var(--primary) / 0.3)",
+                  borderRadius: "12px",
                   backdropFilter: "blur(12px)",
+                  padding: "12px",
                 }}
-                labelStyle={{ color: "hsl(var(--foreground))" }}
+                labelStyle={{ color: "hsl(var(--foreground))", fontWeight: "bold", marginBottom: "8px" }}
+                itemStyle={{ color: "hsl(var(--foreground))" }}
               />
               <Legend 
                 wrapperStyle={{
                   paddingTop: "20px",
                 }}
+                iconType="line"
               />
               {topBrands.map((brand, index) => (
                 <Line
@@ -110,13 +139,17 @@ export const DailyVisibilityChart = () => {
                   dataKey={brand}
                   stroke={brandColors[index]}
                   strokeWidth={3}
-                  dot={{ fill: brandColors[index], r: 5 }}
-                  activeDot={{ r: 8 }}
+                  dot={{ fill: brandColors[index], r: 6, strokeWidth: 2, stroke: "hsl(var(--background))" }}
+                  activeDot={{ r: 8, strokeWidth: 2 }}
                   name={brand}
                 />
               ))}
             </LineChart>
           </ResponsiveContainer>
+          
+          <div className="mt-6 text-center text-sm text-muted-foreground">
+            Données basées sur {chartData.length} jours d'analyse • Top 5 marques
+          </div>
         </Card>
       </div>
     </section>
