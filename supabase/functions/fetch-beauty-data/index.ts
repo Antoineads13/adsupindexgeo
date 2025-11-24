@@ -103,12 +103,18 @@ Deno.serve(async (req) => {
     console.log('Fetching Daily Visibility data...');
     const dailyVisibilityUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent('Daily Visibility')}?key=${apiKey}`;
     
+    console.log('Daily Visibility URL:', dailyVisibilityUrl);
+    
     const dailyVisibilityResponse = await fetch(dailyVisibilityUrl);
     let dailyVisibility: DailyVisibilityRow[] = [];
+    
+    console.log('Daily Visibility response status:', dailyVisibilityResponse.status);
     
     if (dailyVisibilityResponse.ok) {
       const dailyData = await dailyVisibilityResponse.json();
       const dailyRows = dailyData.values;
+      
+      console.log('Daily Visibility rows found:', dailyRows?.length || 0);
       
       if (dailyRows && dailyRows.length > 1) {
         // Skip header row and parse daily visibility data
@@ -118,9 +124,11 @@ Deno.serve(async (req) => {
           mentions: parseInt(row[2]) || 0,
         }));
         console.log(`Successfully fetched ${dailyVisibility.length} daily visibility records`);
+        console.log('Sample daily data:', dailyVisibility.slice(0, 3));
       }
     } else {
-      console.warn('Daily Visibility sheet not found or could not be fetched');
+      const errorText = await dailyVisibilityResponse.text();
+      console.error('Failed to fetch Daily Visibility:', errorText);
     }
 
     return new Response(
