@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export const BrandTable = () => {
   const { data: beautyData, isLoading } = useBeautyData();
 
-  const brands = beautyData?.brands.slice(0, 10) || [];
+  const brands = beautyData?.brands.slice(0, 20) || [];
 
   return (
     <section className="py-16 bg-background">
@@ -30,7 +30,7 @@ export const BrandTable = () => {
               </thead>
               <tbody className="divide-y divide-border">
                 {isLoading ? (
-                  Array(10).fill(0).map((_, idx) => (
+                  Array(20).fill(0).map((_, idx) => (
                     <tr key={idx}>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-4">
