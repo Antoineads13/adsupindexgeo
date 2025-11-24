@@ -1,9 +1,11 @@
 import { Card } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { useBeautyData } from "@/hooks/useBeautyData";
+import { useBeautyData, DailyVisibility } from "@/hooks/useBeautyData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useMemo } from "react";
+import { format, parseISO } from "date-fns";
 
 const brandColors: Record<string, string> = {
   "La Roche-Posay": "#0066CC",
@@ -56,22 +58,44 @@ export const TopBrandsWithChart = () => {
 
   const topBrands = beautyData?.brands.slice(0, 3) || [];
   
-  // Generate mock trend data for visualization
-  const trendData = [
-    { period: "Sem 1" },
-    { period: "Sem 2" },
-    { period: "Sem 3" },
-    { period: "Sem 4" },
-    { period: "Sem 5" },
-  ].map((period, idx) => {
-    const dataPoint: any = { ...period };
-    topBrands.forEach(brand => {
-      // Create realistic trend based on current market share
-      const variance = (Math.random() - 0.5) * 2;
-      dataPoint[brand.name] = Math.max(0, brand.marketShare + variance * (5 - idx));
+  // Process daily visibility data
+  const chartData = useMemo(() => {
+    if (!beautyData?.dailyVisibility || beautyData.dailyVisibility.length === 0) return [];
+
+    // Group data by date
+    const groupedByDate: Record<string, Record<string, number>> = {};
+    
+    beautyData.dailyVisibility.forEach((item: DailyVisibility) => {
+      if (!groupedByDate[item.date]) {
+        groupedByDate[item.date] = {};
+      }
+      groupedByDate[item.date][item.brand] = item.mentions;
     });
-    return dataPoint;
-  });
+
+    // Convert to array format for recharts and format dates
+    return Object.entries(groupedByDate).map(([date, brands]) => {
+      try {
+        const parsedDate = parseISO(date);
+        return {
+          date: format(parsedDate, "dd/MM"),
+          fullDate: date,
+          ...brands,
+        };
+      } catch {
+        return {
+          date,
+          fullDate: date,
+          ...brands,
+        };
+      }
+    }).sort((a, b) => new Date(a.fullDate).getTime() - new Date(b.fullDate).getTime());
+  }, [beautyData]);
+
+  // Get top 5 brands for the chart
+  const topChartBrands = useMemo(() => {
+    if (!beautyData?.brands) return [];
+    return beautyData.brands.slice(0, 5).map(b => b.name);
+  }, [beautyData]);
 
   return (
     <section className="bg-gradient-to-b from-background to-muted/20 py-16">
@@ -151,44 +175,67 @@ export const TopBrandsWithChart = () => {
           {/* Chart */}
           <div className="p-6">
             {isLoading ? (
-              <Skeleton className="h-[350px] w-full" />
+              <Skeleton className="h-[400px] w-full" />
             ) : (
-              <ResponsiveContainer width="100%" height={350}>
-                <LineChart data={trendData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
-                  <XAxis
-                    dataKey="period"
-                    stroke="hsl(var(--muted-foreground))"
-                    tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-                    tickLine={false}
-                  />
-                  <YAxis
-                    stroke="hsl(var(--muted-foreground))"
-                    tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-                    tickLine={false}
-                    tickFormatter={(value) => `${value}%`}
-                    domain={[0, 60]}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend
-                    wrapperStyle={{
-                      paddingTop: "20px",
-                    }}
-                    iconType="circle"
-                  />
-                  {topBrands.map((brand) => (
-                    <Line
-                      key={brand.name}
-                      type="monotone"
-                      dataKey={brand.name}
-                      stroke={brandColors[brand.name] || "#E91E63"}
-                      strokeWidth={3}
-                      dot={{ fill: brandColors[brand.name] || "#E91E63", r: 4 }}
-                      activeDot={{ r: 6 }}
+              <>
+                <ResponsiveContainer width="100%" height={400}>
+                  <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+                    <XAxis 
+                      dataKey="date" 
+                      stroke="hsl(var(--muted-foreground))"
+                      tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+                      angle={-45}
+                      textAnchor="end"
+                      height={80}
                     />
-                  ))}
-                </LineChart>
-              </ResponsiveContainer>
+                    <YAxis 
+                      stroke="hsl(var(--muted-foreground))"
+                      tick={{ fill: "hsl(var(--muted-foreground))" }}
+                      label={{ 
+                        value: 'Mentions', 
+                        angle: -90, 
+                        position: 'insideLeft', 
+                        fill: "hsl(var(--muted-foreground))",
+                        style: { fontWeight: 'bold' }
+                      }}
+                    />
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--card))",
+                        border: "2px solid hsl(var(--primary) / 0.3)",
+                        borderRadius: "12px",
+                        backdropFilter: "blur(12px)",
+                        padding: "12px",
+                      }}
+                      labelStyle={{ color: "hsl(var(--foreground))", fontWeight: "bold", marginBottom: "8px" }}
+                      itemStyle={{ color: "hsl(var(--foreground))" }}
+                    />
+                    <Legend 
+                      wrapperStyle={{
+                        paddingTop: "20px",
+                      }}
+                      iconType="line"
+                    />
+                    {topChartBrands.map((brand, index) => (
+                      <Line
+                        key={brand}
+                        type="monotone"
+                        dataKey={brand}
+                        stroke={brandColors[brand] || "#E91E63"}
+                        strokeWidth={3}
+                        dot={{ fill: brandColors[brand] || "#E91E63", r: 6, strokeWidth: 2, stroke: "hsl(var(--background))" }}
+                        activeDot={{ r: 8, strokeWidth: 2 }}
+                        name={brand}
+                      />
+                    ))}
+                  </LineChart>
+                </ResponsiveContainer>
+                
+                <div className="mt-6 text-center text-sm text-muted-foreground">
+                  Données basées sur {chartData.length} jours d'analyse • Top 5 marques
+                </div>
+              </>
             )}
           </div>
         </Card>
