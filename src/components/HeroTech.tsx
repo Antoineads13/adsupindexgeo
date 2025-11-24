@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Globe, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export const HeroTech = () => {
@@ -114,7 +114,7 @@ export const HeroTech = () => {
   }, []);
 
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-background via-background to-primary/5">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-primary/5">
       {/* Animated particle network background */}
       <canvas
         ref={canvasRef}
@@ -129,8 +129,8 @@ export const HeroTech = () => {
       <div className="absolute right-1/4 bottom-1/4 h-[500px] w-[500px] rounded-full bg-secondary/10 blur-[100px] animate-pulse [animation-delay:1s]" />
       
       <div className="container relative z-10 mx-auto px-4 py-20">
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          {/* Left content */}
+        <div className="max-w-5xl mx-auto text-center space-y-12">
+          {/* Main content centered */}
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 backdrop-blur-xl">
               <Sparkles className="h-4 w-4 text-primary animate-pulse" />
@@ -151,47 +151,47 @@ export const HeroTech = () => {
                 </span>
               </h1>
               
-              <p className="max-w-xl text-lg text-muted-foreground md:text-xl leading-relaxed">
+              <p className="max-w-2xl mx-auto text-lg text-muted-foreground md:text-xl leading-relaxed">
                 Le premier indice de mesure pour votre visibilité dans les assistants IA. 
                 Données en temps réel, benchmarks sectoriels, optimisation continue.
               </p>
             </div>
 
-            {/* Animated metrics */}
-            <div className="grid grid-cols-3 gap-4">
+            {/* Animated metrics centered */}
+            <div className="flex justify-center gap-8 flex-wrap">
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative p-4 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm">
-                  <p className="text-3xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent">
+                <div className="relative p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm min-w-[140px]">
+                  <p className="text-4xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent">
                     +{stats.visibility}%
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">Croissance moyenne</p>
+                  <p className="text-sm text-muted-foreground mt-2">Croissance moyenne</p>
                 </div>
               </div>
               
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-secondary/20 to-transparent rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative p-4 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm">
-                  <p className="text-3xl font-bold bg-gradient-to-br from-secondary to-secondary/60 bg-clip-text text-transparent">
+                <div className="relative p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm min-w-[140px]">
+                  <p className="text-4xl font-bold bg-gradient-to-br from-secondary to-secondary/60 bg-clip-text text-transparent">
                     {stats.position}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">Position moyenne</p>
+                  <p className="text-sm text-muted-foreground mt-2">Position moyenne</p>
                 </div>
               </div>
               
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="relative p-4 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm">
-                  <p className="text-3xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">
+                <div className="relative p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm min-w-[140px]">
+                  <p className="text-4xl font-bold bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent">
                     {stats.brands.toLocaleString()}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">Marques suivies</p>
+                  <p className="text-sm text-muted-foreground mt-2">Marques suivies</p>
                 </div>
               </div>
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-4 pt-4">
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
               <Button 
                 size="lg" 
                 className="group relative overflow-hidden bg-gradient-to-r from-primary to-secondary text-lg font-semibold shadow-[0_0_40px_hsl(var(--primary)_/_0.3)] transition-all hover:shadow-[0_0_60px_hsl(var(--primary)_/_0.5)] hover:scale-105"
@@ -212,7 +212,7 @@ export const HeroTech = () => {
             </div>
 
             {/* Trust indicators */}
-            <div className="flex items-center gap-6 pt-6 border-t border-border/50">
+            <div className="flex items-center justify-center gap-6 pt-6 border-t border-border/50 max-w-md mx-auto">
               <div className="flex -space-x-3">
                 {[1, 2, 3, 4].map((i) => (
                   <div
@@ -224,80 +224,11 @@ export const HeroTech = () => {
                   </div>
                 ))}
               </div>
-              <div>
-                <p className="text-sm font-bold">+500 marques nous font confiance</p>
-                <p className="text-xs text-muted-foreground">Beauty • Tech • Retail • Finance</p>
+              <div className="text-left">
+                <p className="text-sm font-bold">+500 marques</p>
+                <p className="text-xs text-muted-foreground">nous font confiance</p>
               </div>
             </div>
-          </div>
-
-          {/* Right content - Data visualization */}
-          <div className="relative">
-            <div className="relative rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-card/80 to-card/40 p-8 backdrop-blur-xl shadow-[0_0_50px_hsl(var(--primary)_/_0.15)]">
-              {/* Animated bars chart */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-muted-foreground">ChatGPT</span>
-                  <span className="text-sm font-bold text-primary">87%</span>
-                </div>
-                <div className="h-3 bg-muted rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-primary to-secondary rounded-full animate-[pulse_2s_ease-in-out_infinite]"
-                    style={{ width: "87%", animation: "expandBar 1.5s ease-out forwards" }}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-sm font-medium text-muted-foreground">Gemini</span>
-                  <span className="text-sm font-bold text-secondary">72%</span>
-                </div>
-                <div className="h-3 bg-muted rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-secondary to-primary rounded-full"
-                    style={{ width: "72%", animation: "expandBar 1.5s ease-out 0.2s forwards", animationFillMode: "both" }}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-sm font-medium text-muted-foreground">Perplexity</span>
-                  <span className="text-sm font-bold text-primary">64%</span>
-                </div>
-                <div className="h-3 bg-muted rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-primary/80 to-secondary/80 rounded-full"
-                    style={{ width: "64%", animation: "expandBar 1.5s ease-out 0.4s forwards", animationFillMode: "both" }}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-sm font-medium text-muted-foreground">Claude</span>
-                  <span className="text-sm font-bold text-secondary">58%</span>
-                </div>
-                <div className="h-3 bg-muted rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-secondary/80 to-primary/80 rounded-full"
-                    style={{ width: "58%", animation: "expandBar 1.5s ease-out 0.6s forwards", animationFillMode: "both" }}
-                  />
-                </div>
-              </div>
-
-              {/* Floating metric cards */}
-              <div className="absolute -left-6 top-1/4 rounded-xl border border-primary/30 bg-card/90 backdrop-blur-xl p-4 shadow-[0_0_30px_hsl(var(--primary)_/_0.2)] animate-[float_3s_ease-in-out_infinite]">
-                <p className="text-xs text-muted-foreground">Taux de citation</p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">+24%</p>
-                <p className="text-xs text-green-600 font-semibold">↑ vs. mois dernier</p>
-              </div>
-              
-              <div className="absolute -right-6 bottom-1/4 rounded-xl border border-secondary/30 bg-card/90 backdrop-blur-xl p-4 shadow-[0_0_30px_hsl(var(--secondary)_/_0.2)] animate-[float_3s_ease-in-out_infinite] [animation-delay:1s]">
-                <p className="text-xs text-muted-foreground">INDEX GEO</p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">8.7/10</p>
-                <p className="text-xs text-primary font-semibold">Top 5% secteur</p>
-              </div>
-            </div>
-
-            {/* Decorative glows */}
-            <div className="absolute -bottom-8 -right-8 h-40 w-40 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 blur-3xl" />
-            <div className="absolute -left-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-secondary/20 to-primary/20 blur-3xl" />
           </div>
         </div>
       </div>
