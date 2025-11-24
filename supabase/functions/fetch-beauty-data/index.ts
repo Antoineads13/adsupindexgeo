@@ -18,6 +18,12 @@ interface SheetRow {
   averagePosition: number;
 }
 
+interface DailyVisibilityRow {
+  date: string;
+  brand: string;
+  mentions: number;
+}
+
 Deno.serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -93,9 +99,34 @@ Deno.serve(async (req) => {
 
     console.log(`Successfully fetched ${brands.length} brands from sheet: ${firstSheetName}`);
 
+    // Now fetch Daily Visibility data
+    console.log('Fetching Daily Visibility data...');
+    const dailyVisibilityUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent('Daily Visibility')}?key=${apiKey}`;
+    
+    const dailyVisibilityResponse = await fetch(dailyVisibilityUrl);
+    let dailyVisibility: DailyVisibilityRow[] = [];
+    
+    if (dailyVisibilityResponse.ok) {
+      const dailyData = await dailyVisibilityResponse.json();
+      const dailyRows = dailyData.values;
+      
+      if (dailyRows && dailyRows.length > 1) {
+        // Skip header row and parse daily visibility data
+        dailyVisibility = dailyRows.slice(1).map((row: string[]) => ({
+          date: row[0] || '',
+          brand: row[1] || '',
+          mentions: parseInt(row[2]) || 0,
+        }));
+        console.log(`Successfully fetched ${dailyVisibility.length} daily visibility records`);
+      }
+    } else {
+      console.warn('Daily Visibility sheet not found or could not be fetched');
+    }
+
     return new Response(
       JSON.stringify({ 
         brands,
+        dailyVisibility,
         lastUpdated: new Date().toISOString(),
         sheetName: firstSheetName
       }),

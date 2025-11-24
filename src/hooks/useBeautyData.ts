@@ -12,8 +12,15 @@ export interface BeautyBrand {
   averagePosition: number;
 }
 
+export interface DailyVisibility {
+  date: string;
+  brand: string;
+  mentions: number;
+}
+
 export interface BeautyDataResponse {
   brands: BeautyBrand[];
+  dailyVisibility: DailyVisibility[];
   lastUpdated: string;
 }
 
