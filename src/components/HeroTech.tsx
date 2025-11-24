@@ -172,13 +172,6 @@ export const HeroTech = () => {
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1 relative z-10" />
                 <div className="absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="border-2 border-primary/30 text-lg font-semibold backdrop-blur-sm bg-background/50 hover:bg-primary/5 hover:border-primary/50 transition-all hover:scale-105"
-              >
-                Voir la Démo Live
-              </Button>
             </div>
 
             {/* Trust indicators */}
@@ -195,7 +188,7 @@ export const HeroTech = () => {
                 ))}
               </div>
               <div className="text-left">
-                <p className="text-sm font-bold">+500 marques</p>
+                <p className="text-sm font-bold">200+ marques</p>
                 <p className="text-xs text-muted-foreground">nous font confiance</p>
               </div>
             </div>
