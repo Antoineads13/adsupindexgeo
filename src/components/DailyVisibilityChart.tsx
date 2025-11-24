@@ -26,7 +26,7 @@ export const DailyVisibilityChart = () => {
       try {
         const parsedDate = parseISO(date);
         return {
-          date: format(parsedDate, "dd MMM", { locale: fr }),
+          date: format(parsedDate, "dd/MM"),
           fullDate: date,
           ...brands,
         };
