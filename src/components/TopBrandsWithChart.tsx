@@ -45,7 +45,7 @@ export const TopBrandsWithChart = () => {
         <div className="mb-6 flex items-center justify-between">
           <div>
             <p className="text-sm font-semibold text-muted-foreground">
-              Top <span className="text-foreground">Streaming</span> marques cette semaine
+              Top <span className="text-foreground">Beauté</span> marques cette semaine
             </p>
           </div>
           <div className="flex items-center gap-2">
