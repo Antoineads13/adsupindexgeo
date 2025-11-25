@@ -107,7 +107,7 @@ export const HeroTech = () => {
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 backdrop-blur-xl">
               <Sparkles className="h-4 w-4 text-primary animate-pulse" />
               <span className="text-sm font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Ad's Up INDEX GEO
+                Ad's up INDEX GEO
               </span>
             </div>
             
