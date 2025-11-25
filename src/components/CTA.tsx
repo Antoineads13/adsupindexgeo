@@ -9,7 +9,7 @@ export const CTA = () => {
       <div className="container relative z-10 mx-auto px-4 text-center">
         <div className="mb-6 inline-block">
           <span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-primary shadow-md">
-            INDEX GEO AD'S UP
+            INDEX GEO AD'S up
           </span>
         </div>
         

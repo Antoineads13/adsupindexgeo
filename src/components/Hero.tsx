@@ -23,7 +23,7 @@ export const Hero = () => {
       <div className="container relative z-10 mx-auto px-4 py-20 text-center">
         <div className="mb-6 inline-block">
           <span className="text-sm font-semibold tracking-wider text-primary">
-            AD'S UP CONSULTING
+            AD'S up CONSULTING
           </span>
         </div>
         

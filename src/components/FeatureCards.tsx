@@ -24,7 +24,7 @@ const features = [
     icon: TrendingUp,
     title: "Classement par Impact",
     description:
-      "Nous classons par impact grâce à la même méthode utilisée pour tous les clients Ad's Up.",
+      "Nous classons par impact grâce à la même méthode utilisée pour tous les clients Ad's up.",
   },
 ];
 
@@ -40,7 +40,7 @@ export const FeatureCards = () => {
             </span>
           </h2>
           <p className="mx-auto max-w-2xl text-muted-foreground">
-            Chaque information de l'écosystème Ad's Up se nourrit de notre indice de classement de marques.
+            Chaque information de l'écosystème Ad's up se nourrit de notre indice de classement de marques.
           </p>
         </div>
 
